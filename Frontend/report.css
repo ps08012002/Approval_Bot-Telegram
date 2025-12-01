@@ -1,0 +1,159 @@
+:root {
+  --mainColor: #1a1b22;
+  --secondColor: #333646;
+  --activeColor: #ffae00;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "ubuntu", sans-serif;
+  background-color: var(--mainColor);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+/* Heading */
+.wrapper h1 {
+  text-align: center;
+  color: #fff;
+  margin-top: 30px;
+  font-weight: bold;
+}
+
+/* Table */
+table {
+  border: 1px solid var(--secondColor);
+  border-radius: 10px;
+  background-color: var(--secondColor);
+  backdrop-filter: blur(8px);
+  width: 95%;
+  max-width: 1100px; /* agak besar biar muat semua */
+  margin: 20px auto;
+  padding: 10px;
+  color: #fff;
+  border-collapse: collapse;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--secondColor);
+  table-layout: fixed; /* penting */
+}
+
+/* Cell */
+th,
+td {
+  border: 1px solid #444;
+  padding: 8px;
+  text-align: center;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Header */
+th {
+  background-color: var(--secondColor);
+  font-weight: bold;
+}
+
+/* No */
+th:nth-child(1),
+td:nth-child(1) {
+  width: 40px;
+} /* Tanggal */
+th:nth-child(2),
+td:nth-child(2) {
+  width: 80px;
+} /* Nama */
+th:nth-child(3),
+td:nth-child(3) {
+  width: 150px;
+} /* Departemen */
+th:nth-child(4),
+td:nth-child(4) {
+  width: 92px;
+} /* Email */
+th:nth-child(5),
+td:nth-child(5) {
+  width: 200px;
+} /* Atasan */
+th:nth-child(6),
+td:nth-child(6) {
+  width: 90px;
+} /* Barang */
+th:nth-child(7),
+td:nth-child(7) {
+  width: 120px;
+} /* Model */
+th:nth-child(8),
+td:nth-child(8) {
+  width: 120px;
+} /* Quantity */
+th:nth-child(9),
+td:nth-child(9) {
+  width: 80px;
+} /* Satuan */
+th:nth-child(10),
+td:nth-child(10) {
+  width: 70px;
+} /* Lokasi */
+th:nth-child(11),
+td:nth-child(11) {
+  width: 120px;
+} /* Perusahaan */
+th:nth-child(12),
+td:nth-child(12) {
+  width: 200px;
+} /* Keterangan */
+th:nth-child(13),
+td:nth-child(13) {
+  width: 250px;
+} /* Status */
+th:nth-child(14),
+td:nth-child(14) {
+  width: 100px;
+} /* Approved By */
+th:nth-child(15),
+td:nth-child(15) {
+  width: 120px;
+}
+
+/* Pagination Buttons */
+.button-np {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+button {
+  width: 90px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--activeColor);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Footer */
+#copyright {
+  width: 100vw;
+  text-align: center;
+  padding: 7px 0;
+  background-color: var(--secondColor);
+  color: #fff;
+  font-size: 14px;
+  margin-top: auto;
+}

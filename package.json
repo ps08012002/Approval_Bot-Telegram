@@ -1,0 +1,37 @@
+{
+  "name": "approval",
+  "version": "1.0.0",
+  "description": "Web untuk approval",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd Backend && nodemon index.js",
+    "seed": "cd Backend && node prisma/seed.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "node-cron": "^4.2.1",
+    "node-fetch": "^3.3.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "nodemailer": "^7.0.6",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ps08012002/Program_Approval.git"
+  },
+  "keywords": [
+    "Approval"
+  ],
+  "author": "Putra Sangaji",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ps08012002/Program_Approval/issues"
+  },
+  "homepage": "https://github.com/ps08012002/Program_Approval#readme"
+}
