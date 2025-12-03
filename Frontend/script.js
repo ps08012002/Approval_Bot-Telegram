@@ -1,4 +1,3 @@
-// script.js
 const nama = document.getElementById("nama");
 const cabang = document.getElementById("cabang");
 const barang = document.getElementById("barang");
@@ -25,19 +24,16 @@ const timeFormat = new Intl.DateTimeFormat("en-GB", {
 
 console.log(formatDate);
 
-// simple listeners (no this.event)
 nama.addEventListener("change", (e) => console.log("nama:", e.target.value));
 barang.addEventListener("change", (e) => console.log("barang:", e.target.value));
 quantity.addEventListener("change", (e) => console.log("quantity:", e.target.value));
 
-// Load cabang
 async function loadcabang() {
   try {
     const res = await fetch("http://localhost:3000/cabang");
     const json = await res.json();
     const hasil = json.data || [];
 
-    // clear first
     cabang.innerHTML = '<option value="">-- Pilih Cabang --</option>';
 
     hasil.forEach((kode) => {
@@ -51,7 +47,6 @@ async function loadcabang() {
   }
 }
 
-// Submit
 async function onSubmit() {
   const overlay = document.getElementById("overlayLoader");
   if (overlay) overlay.style.display = "flex";
@@ -97,7 +92,6 @@ async function onSubmit() {
   }
 }
 
-// Jalankan saat halaman dimuat
 window.onload = () => {
   const dateUser = document.getElementById("dateUser");
   const timeUser = document.getElementById("timeUser");

@@ -74,6 +74,7 @@ app.post("/report", async (req, res) => {
         quantity: parseInt(quantity, 10) || 0,
         cabang: String(cabang),
         status: "pending",
+        approveby: "", // kosong dulu, nanti diupdate saat approve/reject
       },
     });
 
@@ -132,6 +133,7 @@ async function sendApprovalToTelegram(chatId, report) {
   const safeDate = report.date ? escapeHtmlForTelegram(String(report.date)) : "";
   const safeTime = report.time ? escapeHtmlForTelegram(String(report.time)) : "";
 
+  // initial text includes status pending (optional).
   const text = `
 <b>📦 Permintaan Baru</b>
 -----------------------
@@ -141,7 +143,7 @@ async function sendApprovalToTelegram(chatId, report) {
 📍 Cabang: <b>${safeCabang}</b>
 📅 Tanggal: <b>${safeDate}</b> ${safeTime}
 🟡 Status: <b>Pending</b>
-  `;
+`;
 
   const approveCb = `approve_${report.id}`;
   const rejectCb = `reject_${report.id}`;
@@ -164,6 +166,29 @@ async function sendApprovalToTelegram(chatId, report) {
   }
 }
 
+// helper: build message text from DB record (consistent format)
+function buildTelegramTextFromRecord(record, actorLabel = "") {
+  const safeNama = escapeHtmlForTelegram(record.nama);
+  const safeBarang = escapeHtmlForTelegram(record.barang);
+  const safeCabang = escapeHtmlForTelegram(record.cabang);
+  const safeQty = escapeHtmlForTelegram(String(record.quantity));
+  const tanggalText = record.tanggal ? new Date(Number(record.tanggal) * 1000).toLocaleString("id-ID") : "";
+
+  // include status and actor if provided
+  const statusLine = record.status && String(record.status).trim() ? `⚙️ Status: <b>${String(record.status).toUpperCase()}</b>${actorLabel ? " by " + escapeHtmlForTelegram(actorLabel) : ""}` : "";
+
+  return `
+<b>📦 Permintaan Baru</b>
+-----------------------
+👤 Nama: <b>${safeNama}</b>
+📦 Barang: <b>${safeBarang}</b>
+🔢 Qty: <b>${safeQty}</b>
+📍 Cabang: <b>${safeCabang}</b>
+📅 Tanggal: <b>${tanggalText}</b>
+${statusLine}
+`.trim();
+}
+
 // Polling handler for callback_query
 bot.on("callback_query", async (callbackQuery) => {
   try {
@@ -180,34 +205,42 @@ bot.on("callback_query", async (callbackQuery) => {
       return bot.answerCallbackQuery(callbackQuery.id, { text: "Invalid action", show_alert: true });
     }
 
-    // read report
+    // read report (ensure exists)
     const report = await db.tb_report.findUnique({ where: { id: reportId } });
     if (!report) {
       await bot.answerCallbackQuery(callbackQuery.id, { text: "Data tidak ditemukan", show_alert: true });
       return;
     }
 
-    // update status
+    // compute update values
     const newStatus = action === "approve" ? "approved" : "rejected";
     const newApproveBy = from.username || from.first_name || String(from.id);
-    await db.tb_report.update({ where: { id: reportId }, data: { status: newStatus, approveby: newApproveBy } });
+
+    // update DB and capture updated record
+    const updated = await db.tb_report.update({
+      where: { id: reportId },
+      data: { status: newStatus, approveby: newApproveBy },
+    });
 
     // popup small ack
     await bot.answerCallbackQuery(callbackQuery.id, { text: `Report #${reportId} ${newStatus}`, show_alert: false });
 
-    // edit message text to show status & actor
-    const actor = from.username || from.first_name || from.id;
-    const newText = (msg.text || "") + `\n\n⚙️ Status: <b>${newStatus.toUpperCase()}</b> by ${escapeHtmlForTelegram(actor)}`;
+    // rebuild message text from updated record and actor
+    const actorLabel = from.username || from.first_name || String(from.id);
+    const newText = buildTelegramTextFromRecord(updated, actorLabel);
 
+    // replace whole message text (so old "Status: Pending" is removed)
     try {
       await bot.editMessageText(newText, {
         chat_id: msg.chat.id,
         message_id: msg.message_id,
         parse_mode: "HTML",
       });
-    } catch (err) {}
+    } catch (err) {
+      console.warn("editMessageText failed:", err?.message || err);
+    }
 
-    // remove inline keyboard
+    // remove inline keyboard (disable buttons)
     try {
       await bot.editMessageReplyMarkup({ inline_keyboard: [] }, { chat_id: msg.chat.id, message_id: msg.message_id });
     } catch (err) {
