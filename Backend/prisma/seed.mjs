@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.tb_cabang.createMany({
-    data: [{ cabang: "Surabaya" }, { cabang: "Sidoarjo" }],
+    data: [{ cabang: "Surabaya" }, { cabang: "Sidoarjo" }], //Masukkan data cabang sesuai kebutuhan
   });
 }
 

@@ -17,13 +17,12 @@
     "node-cron": "^4.2.1",
     "node-fetch": "^3.3.2",
     "node-telegram-bot-api": "^0.66.0",
-    "nodemailer": "^7.0.6",
     "nodemon": "^3.1.10",
     "prisma": "^6.19.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ps08012002/Program_Approval.git"
+    "url": "git+https://github.com/ps08012002/Approval_Bot-Telegram.git"
   },
   "keywords": [
     "Approval"
@@ -31,7 +30,7 @@
   "author": "Putra Sangaji",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ps08012002/Program_Approval/issues"
+    "url": "https://github.com/ps08012002/Approval_Bot-Telegram/issues"
   },
-  "homepage": "https://github.com/ps08012002/Program_Approval#readme"
+  "homepage": "https://github.com/ps08012002/Approval_Bot-Telegram#readme"
 }
