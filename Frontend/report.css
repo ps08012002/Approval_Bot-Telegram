@@ -29,6 +29,58 @@ body {
   font-weight: bold;
 }
 
+/* ============================
+   SEARCH BAR (TAMBAHAN)
+   ============================ */
+
+/* Bungkus header agar search bisa diposisikan absolute */
+.header-wrapper {
+  position: relative;
+  width: 95%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Posisi search di kanan atas */
+.search-container {
+  position: absolute;
+  right: 220px;
+  top: 30px;
+}
+
+/* Box search */
+.search-box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Input lebih besar */
+.search-box input {
+  padding: 8px 10px;
+  width: 200px; /* lebih besar */
+  border-radius: 6px;
+  border: 1px solid #666;
+  background-color: #22242b;
+  color: #fff;
+  outline: none;
+}
+
+/* Tombol search */
+.search-box button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  background: var(--activeColor);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.search-box button:hover {
+  background: #e79d00;
+}
+
 /* Table */
 table {
   border: 1px solid var(--secondColor);

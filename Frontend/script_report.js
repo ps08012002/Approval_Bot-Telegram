@@ -1,3 +1,4 @@
+// script_report.js
 console.log("script_report.js loaded");
 
 window.addEventListener("error", (e) => {
@@ -15,6 +16,8 @@ window.addEventListener("unhandledrejection", (e) => {
 
 let currentPage = 1;
 let totalPages = 1;
+let perPage = 20;
+let currentSearch = ""; // current search query
 
 function ready(cb) {
   if (document.readyState !== "loading") return cb();
@@ -23,19 +26,42 @@ function ready(cb) {
 
 ready(() => {
   console.log("DOM ready");
-  const tbody = document.getElementById("tbody");
-  console.log("tbody element:", tbody);
   console.log("Location:", location.href);
+
+  // hook search UI
+  const input = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+
+  // search hanya saat klik tombol
+  searchBtn.addEventListener("click", () => {
+    currentSearch = input.value.trim();
+    currentPage = 1;
+    fetchData(currentPage);
+  });
+
+  // juga support Enter key
+  input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      currentSearch = input.value.trim();
+      currentPage = 1;
+      fetchData(currentPage);
+    }
+  });
+
+  // initial load
   fetchData(currentPage);
 });
 
 async function fetchData(page = 1) {
   try {
-    const perPage = 20;
-    const url = `http://localhost:3000/getreport?page=${page}&per_page=${perPage}`;
-    console.log("Fetching:", url);
+    const url = new URL("http://localhost:3000/getreport");
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("per_page", String(perPage));
+    if (currentSearch) url.searchParams.set("q", currentSearch);
 
-    const response = await fetch(url);
+    console.log("Fetching:", url.toString());
+
+    const response = await fetch(url.toString());
     console.log("Fetch response ok?", response.ok, "status:", response.status);
 
     if (!response.ok) {
@@ -62,8 +88,7 @@ function displayData(data) {
     }
 
     const report = data?.data || [];
-    const perPage = 20;
-    totalPages = Math.ceil((data?.total || 0) / perPage);
+    totalPages = Math.max(1, Math.ceil((data?.total || 0) / perPage));
     console.log("totalPages:", totalPages, "items:", report.length);
     tbody.innerHTML = "";
 
@@ -107,7 +132,7 @@ function displayData(data) {
       tr.appendChild(statusTd);
 
       const approveTd = document.createElement("td");
-      const possible = [value.approveby, value.approve_by, value.approved_by, value.approver, value.approve && value.approve.by, value.approve && value.approve.name];
+      const possible = [value.action_by ?? value.approveby, value.approve_by, value.approved_by, value.approver, value.approve && value.approve.by, value.approve && value.approve.name];
       const approver = possible.find((v) => v !== undefined && v !== null && String(v).trim() !== "");
       approveTd.textContent = approver ?? "— Belum diset —";
       tr.appendChild(approveTd);
@@ -116,6 +141,20 @@ function displayData(data) {
     });
   } catch (err) {
     console.error("displayData error:", err);
+  }
+}
+
+function nextPage() {
+  if (currentPage < totalPages) {
+    currentPage++;
+    fetchData(currentPage);
+  }
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    fetchData(currentPage);
   }
 }
 

@@ -96,23 +96,30 @@ app.post("/report", async (req, res) => {
   }
 });
 
-// GET /getreport (robust, safe)
+// GET /getreport
 app.get("/getreport", async (req, res) => {
   try {
-    // parse dengan aman
-    const pageNum = Number(req.query.page) || 1;
+    const pageNum = Math.max(1, Number(req.query.page) || 1);
     const perPage = Math.max(1, Number(req.query.per_page) || 10);
+    const q = req.query.q ? String(req.query.q).trim() : "";
 
-    // compute skip
     const skip = (pageNum - 1) * perPage;
 
-    // total count
-    const total = await db.tb_report.count();
+    const where = q
+      ? {
+          nama: {
+            contains: q,
+            // no 'mode' here
+          },
+        }
+      : {};
 
-    // query with safe numeric values
+    const total = await db.tb_report.count({ where });
+
     const items = await db.tb_report.findMany({
+      where,
       take: perPage,
-      skip: skip,
+      skip,
       orderBy: { id: "desc" },
     });
 

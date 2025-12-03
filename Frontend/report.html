@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Monitoring - Status Approval</title>
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-
-    <link rel="stylesheet" href="report.css" />
-
+    <!-- Google font -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@300;400;700;&display=swap" rel="stylesheet" />
-    <title>Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@300;400;700&display=swap" rel="stylesheet" />
+
+    <!-- CSS: pastikan file report.css ada di folder yang sama -->
+    <link rel="stylesheet" href="report.css" />
   </head>
 
   <body>
     <main id="main">
       <div class="wrapper">
-        <h1>Monitoring Status Approval</h1>
+        <!-- HEADER: title centered, search absolute to the right -->
+        <header class="page-header">
+          <h1 class="title">Monitoring Status Approval</h1>
+
+          <div class="search-container" aria-hidden="false">
+            <div class="search-box">
+              <input id="searchInput" type="search" placeholder="Cari nama..." aria-label="Cari nama" autocomplete="off" />
+              <button id="searchBtn" type="button">Search</button>
+            </div>
+          </div>
+        </header>
+
+        <!-- TABLE -->
         <div class="tabel">
-          <table cellpadding="10">
+          <table cellpadding="10" role="table" aria-label="Daftar laporan">
             <thead>
               <tr>
                 <th>No.</th>
@@ -36,21 +43,25 @@
                 <th>Action By</th>
               </tr>
             </thead>
-            <tbody id="tbody"></tbody>
+            <tbody id="tbody">
+              <!-- rows injected by script_report.js -->
+            </tbody>
           </table>
         </div>
 
+        <!-- PAGINATION -->
         <div class="button-np">
-          <button onclick="prevPage()">Previous</button>
-          <button onclick="nextPage()">Next</button>
+          <button type="button" onclick="prevPage()">Previous</button>
+          <button type="button" onclick="nextPage()">Next</button>
         </div>
       </div>
     </main>
 
-    <div id="copyright">
-      <div class="wrapper">&copy; 2025. All Rights Reserved. <br /><b>firdaus</b></div>
-    </div>
+    <footer id="copyright">
+      <div class="wrapper">&copy; 2025. All Rights Reserved. <br /><strong>Mr_UwaaW</strong></div>
+    </footer>
 
+    <!-- JS: pastikan file script_report.js ada di folder yang sama -->
     <script src="script_report.js"></script>
   </body>
 </html>
