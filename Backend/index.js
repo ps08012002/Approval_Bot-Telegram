@@ -106,11 +106,14 @@ app.get("/getreport", async (req, res) => {
     const skip = (pageNum - 1) * perPage;
 
     const where = q
-      ? {
-          nama: {
-            contains: q,
-            // no 'mode' here
-          },
+      ? { 
+          OR : [
+          {nama: { contains: q, }},
+          {barang :{contains:q, }},
+          {cabang: { contains: q, }},
+          {status :{contains:q, }},
+          {approveby :{contains:q, }},
+        ]
         }
       : {};
 
